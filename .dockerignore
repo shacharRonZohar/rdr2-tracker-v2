@@ -90,3 +90,6 @@ sw.*
 *.swp
 
 .output
+
+# PNPM version file
+pnpm-lock.yaml
