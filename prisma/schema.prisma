@@ -24,6 +24,12 @@ enum AnimalType {
   FISH
 }
 
+enum ItemType {
+  ANIMAL
+  PLANT
+  LEGENDARY_ANIMAL
+}
+
 // Animal model stores information about different animals
 model Animal {
   id        String     @id @default(cuid())
@@ -108,6 +114,44 @@ model User {
   email     String   @unique
   name      String?
   password  String
+  // data: [{ "id": "asd123", "type": ItemType,trackerVals:['0,1']}], where
+  // 0 is identifier for isKilled, 1 is figured out on the application level identifierTrackerValsMap, in this case means true
+  data      Json?    @default("[]")
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
+
+  @@index([data])
+  @@index([email])
+  @@index([name])
+  @@index([data, email])
+  @@index([data, name])
+  @@index([email, name])
+  @@index([data, email, name])
 }
+
+// model Identifier {
+//   id                           String                         @id @default(cuid())
+//   val                          Int                            @unique // example 0,1,2,3 
+//   TrackerValsNameIdentifierMap TrackerValsNameIdentifierMap[]
+//   IdentifierTracerValMap       IdentifierTracerValMap[]
+
+// }
+
+// model TrackerValsNameIdentifierMap {
+//   id           String     @id @default(cuid())
+//   type         ItemType
+//   name         String     @unique // example isKilled, isCaught, isCollected
+//   identifierId String
+//   identifier   Identifier @relation(fields: [identifierId], references: [id])
+
+// }
+
+// model IdentifierTracerValMap {
+//   id           String     @id @default(cuid())
+//   identifierId String
+//   identifier   Identifier @relation(fields: [identifierId], references: [id])
+//   value        String // example: boolean
+//   createdAt    DateTime   @default(now())
+//   updatedAt    DateTime   @updatedAt
+
+// }
