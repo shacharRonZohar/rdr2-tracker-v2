@@ -1,49 +1,34 @@
-import type { $Enums, PrismaClient } from '@prisma/client'
+import type { $Enums } from '@prisma/client'
 import {
-  identifierNameMap,
-  identifierValIndicator,
-  indicatorMap,
+  defaultCategoriesTrackerValsIdentifierMap,
+  defaultTrackerValsIdentifierMap,
 } from '~/consts'
+import { isKeyOf } from '~/util'
 
-export function parseTrackerVals(
-  prisma: PrismaClient,
-  valToParse: { type: $Enums.ItemType; trackerVals: string[] }[]
-) {
-  return valToParse.map(({ type, trackerVals }) => ({
-    type,
-    trackerVals: trackerVals.reduce((acc, trackerVal) => {
-      const [nameIdentifier, val] = trackerVal.split(',')
-      const name = _getIdentifierName(type, +nameIdentifier)
-      const value = _getIdentifierValIndicator(type, +nameIdentifier)
-
-      if (!name || !value) {
-        throw new Error('Invalid tracker val')
-      }
-
-      const finalVal = indicatorMap[value][+val]
-      acc[name] = finalVal
-      return acc
-    }, {} as Record<string, any>),
-  }))
-}
-
-function _getIdentifierName(type: $Enums.ItemType, identifier: number) {
-  const entry = identifierNameMap[type].find(
-    ({ identifier: id }) => id === identifier
-  )
-  if (!entry) {
-    throw new Error('Invalid identifier')
+export function getDefaultTrackerVal<
+  C extends $Enums.Category,
+  SC extends keyof (typeof defaultCategoriesTrackerValsIdentifierMap)[C]
+>(category: C, subCategory?: SC) {
+  // TODO: Get rid of this any
+  let identifiers = defaultCategoriesTrackerValsIdentifierMap[category] as any
+  if (subCategory) {
+    identifiers = identifiers[subCategory]
   }
-  return entry.name
-}
-
-function _getIdentifierValIndicator(type: $Enums.ItemType, identifier: number) {
-  const entry = identifierValIndicator[type].find(({ identifiers: ids }) =>
-    ids.some(id => id === identifier)
-  )
-  if (!entry) {
-    throw new Error('Invalid identifier')
+  if (!Array.isArray(identifiers)) {
+    throw new Error('Identifiers should be an array')
   }
-
-  return entry.value
+  // This casting to as number[] is necessary because of the previous any cast, should be removed when that is removed
+  return (identifiers as number[]).reduce((acc, identifier) => {
+    if (!isKeyOf(defaultTrackerValsIdentifierMap, identifier)) {
+      // This check is mostly for TS
+      // TODO: Check if this is necessary
+      throw new Error(
+        `Identifier ${identifier} not found in defaultTrackerValsIdentifierMap`
+      )
+    }
+    return {
+      ...acc,
+      ...defaultTrackerValsIdentifierMap[identifier],
+    }
+  }, {})
 }

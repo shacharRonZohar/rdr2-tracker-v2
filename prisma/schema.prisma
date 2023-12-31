@@ -18,94 +18,55 @@ enum State {
   NEW_AUSTIN
 }
 
-enum AnimalType {
-  DEFAULT
-  BIRD
-  FISH
-}
-
-enum ItemType {
+enum Category {
   ANIMAL
   PLANT
   LEGENDARY_ANIMAL
 }
 
-// Animal model stores information about different animals
-model Animal {
-  id        String     @id @default(cuid())
-  name      String     @unique @db.VarChar(255)
-  type      AnimalType @default(DEFAULT)
-  locations Location[]
-  createdAt DateTime   @default(now())
-  updatedAt DateTime   @updatedAt
-  comments  Comment[]
+enum SubCategory {
+  DEFAULT
+  BIRD
+  FISH
+  CRITTER
 }
 
-// Plant model stores details about various plants
-model Plant {
-  id        String     @id @default(cuid())
-  name      String     @unique @db.VarChar(255)
-  createdAt DateTime   @default(now())
-  updatedAt DateTime   @updatedAt
-  location  Location[]
-  comments  Comment[]
+model BaseEntity {
+  id            String       @id @default(cuid())
+  name          String       @unique
+  categoryId    String
+  category      Category
+  subCategoryId String?
+  subCategory   SubCategory?
+  locations     Location[]
+  comments      String[]
+
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
 }
 
-// LegendaryAnimal model for rare and unique animals
-model LegendaryAnimal {
-  id   String @id @default(cuid())
-  name String @unique
-
-  locationId String?   @unique
-  location   Location? @relation(fields: [locationId], references: [id])
-  createdAt  DateTime  @default(now())
-  updatedAt  DateTime  @updatedAt
-  comments   Comment[]
-}
-
-// Location model to store location details
 model Location {
-  id        String   @id @default(cuid())
-  region    String
-  name      String?  @unique
-  state     State
+  id             String       @id @default(cuid())
+  text           String
+  locationDataId String
+  locationData   LocationData @relation(fields: [locationDataId], references: [id])
+  entities       BaseEntity[]
+  comments       String[]
+
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
-
-  locationDescriptions LocationDescription[]
-  animal               Animal[]
-  plant                Plant[]
-  legendaryAnimal      LegendaryAnimal?
-  comments             Comment[]
 }
 
-model LocationDescription {
-  id        String    @id @default(cuid())
-  text      String
-  comments  Comment[]
-  createdAt DateTime  @default(now())
-  updatedAt DateTime  @updatedAt
+model LocationData {
+  id       String     @id @default(cuid())
+  location Location[]
+  region   String
+  name     String?    @unique
+  state    State
+  comments String[]
 
-  locationId String
-  location   Location @relation(fields: [locationId], references: [id])
-
-  relatedEntities Json[]
-}
-
-// Comment model for user comments on animals, plants, and legendary animals
-model Comment {
-  id        String   @id @default(cuid())
-  text      String
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
-
-  location              Location[]
-  animal                Animal[]
-  plant                 Plant[]
-  legendaryAnimalId     String?
-  legendaryAnimal       LegendaryAnimal?     @relation(fields: [legendaryAnimalId], references: [id])
-  locationDescriptionId String?
-  locationDescription   LocationDescription? @relation(fields: [locationDescriptionId], references: [id])
 }
 
 // User model to store user information
@@ -114,8 +75,10 @@ model User {
   email     String   @unique
   name      String?
   password  String
-  // data: [{ "id": "asd123", "type": ItemType,trackerVals:['0,1']}], where
-  // 0 is identifier for isKilled, 1 is figured out on the application level identifierTrackerValsMap, in this case means true
+  //  data = [
+  //   { id: 'asd123', trackerVals: [{ isKilled: true, isSkinned: false }] },
+  //   { id: 'asd312', trackerVals: [{ isCollected: false }] },
+  // ]
   data      Json?    @default("[]")
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
@@ -128,30 +91,3 @@ model User {
   @@index([email, name])
   @@index([data, email, name])
 }
-
-// model Identifier {
-//   id                           String                         @id @default(cuid())
-//   val                          Int                            @unique // example 0,1,2,3 
-//   TrackerValsNameIdentifierMap TrackerValsNameIdentifierMap[]
-//   IdentifierTracerValMap       IdentifierTracerValMap[]
-
-// }
-
-// model TrackerValsNameIdentifierMap {
-//   id           String     @id @default(cuid())
-//   type         ItemType
-//   name         String     @unique // example isKilled, isCaught, isCollected
-//   identifierId String
-//   identifier   Identifier @relation(fields: [identifierId], references: [id])
-
-// }
-
-// model IdentifierTracerValMap {
-//   id           String     @id @default(cuid())
-//   identifierId String
-//   identifier   Identifier @relation(fields: [identifierId], references: [id])
-//   value        String // example: boolean
-//   createdAt    DateTime   @default(now())
-//   updatedAt    DateTime   @updatedAt
-
-// }
