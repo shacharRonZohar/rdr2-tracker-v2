@@ -1,9 +1,5 @@
-export default defineEventHandler(ev => {
-  return ev.context.prisma.plant.findMany({
-    select: {
-      id: true,
-      name: true,
-      location: true,
-    },
-  })
+import { getPlants } from '~/server/services/plant'
+
+export default defineEventHandler(async ev => {
+  return getPlants(ev.context.prisma)
 })
