@@ -17,6 +17,8 @@
     "vue-router": "^4.2.5"
   },
   "dependencies": {
-    "@prisma/client": "^5.7.1"
+    "@hebilicious/vue-query-nuxt": "^0.3.0",
+    "@prisma/client": "^5.7.1",
+    "@tanstack/vue-query": "^5.15.5"
   }
 }

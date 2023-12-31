@@ -1,7 +1,9 @@
 <template>
   <div>
-    <RouterLink to="/">Home</RouterLink>
-    <RouterLink to="/test">Test</RouterLink>
+    <NuxtLoadingIndicator />
+    <NuxtLink to="/">Home</NuxtLink>
+    <NuxtLink to="/test">Test</NuxtLink>
+
     <NuxtPage />
   </div>
 </template>
