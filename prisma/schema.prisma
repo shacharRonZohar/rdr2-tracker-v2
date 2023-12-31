@@ -27,7 +27,7 @@ enum AnimalType {
 // Animal model stores information about different animals
 model Animal {
   id        String     @id @default(cuid())
-  name      String     @unique @db.VarChar(255) // Index added for faster queries on name
+  name      String     @unique @db.VarChar(255)
   type      AnimalType
   locations Location[]
   createdAt DateTime   @default(now())
@@ -38,7 +38,7 @@ model Animal {
 // Plant model stores details about various plants
 model Plant {
   id        String     @id @default(cuid())
-  name      String     @unique @db.VarChar(255) // Index added for faster queries on name
+  name      String     @unique @db.VarChar(255)
   createdAt DateTime   @default(now())
   updatedAt DateTime   @updatedAt
   Location  Location[]
@@ -47,27 +47,42 @@ model Plant {
 
 // LegendaryAnimal model for rare and unique animals
 model LegendaryAnimal {
-  id                        String    @id @default(cuid())
-  name                      String    @unique
-  locationId                String    @unique
-  location                  Location  @relation(fields: [locationId], references: [id])
-  createdAt                 DateTime  @default(now())
-  updatedAt                 DateTime  @updatedAt
-  legendaryAnimalLocationId String
-  comments                  Comment[]
+  id         String    @id @default(cuid())
+  name       String    @unique
+  locationId String    @unique
+  location   Location  @relation(fields: [locationId], references: [id])
+  createdAt  DateTime  @default(now())
+  updatedAt  DateTime  @updatedAt
+  comments   Comment[]
 }
 
 // Location model to store location details
 model Location {
   id        String   @id @default(cuid())
-  name      String   @unique
+  region    String
+  name      String?  @unique
   state     State
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
 
-  animals         Animal[]
-  plants          Plant[]
-  LegendaryAnimal LegendaryAnimal?
+  locationDescriptions LocationDescription[]
+  Animal               Animal[]
+  Plant                Plant[]
+  LegendaryAnimal      LegendaryAnimal?
+  comments             Comment[]
+}
+
+model LocationDescription {
+  id        String    @id @default(cuid())
+  text      String
+  comments  Comment[]
+  createdAt DateTime  @default(now())
+  updatedAt DateTime  @updatedAt
+
+  locationId String
+  location   Location @relation(fields: [locationId], references: [id])
+
+  relatedEntities Json[]
 }
 
 // Comment model for user comments on animals, plants, and legendary animals
@@ -77,11 +92,13 @@ model Comment {
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
 
-  legendaryAnimalId String? @unique
-
-  Animal          Animal[]
-  Plant           Plant[]
-  LegendaryAnimal LegendaryAnimal? @relation(fields: [legendaryAnimalId], references: [id])
+  Location              Location[]
+  Animal                Animal[]
+  Plant                 Plant[]
+  legendaryAnimalId     String?
+  LegendaryAnimal       LegendaryAnimal?     @relation(fields: [legendaryAnimalId], references: [id])
+  locationDescriptionId String?
+  LocationDescription   LocationDescription? @relation(fields: [locationDescriptionId], references: [id])
 }
 
 // User model to store user information
