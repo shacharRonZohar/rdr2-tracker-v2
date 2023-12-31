@@ -41,7 +41,7 @@ model Plant {
   name      String     @unique @db.VarChar(255)
   createdAt DateTime   @default(now())
   updatedAt DateTime   @updatedAt
-  Location  Location[]
+  location  Location[]
   comments  Comment[]
 }
 
@@ -67,9 +67,9 @@ model Location {
   updatedAt DateTime @updatedAt
 
   locationDescriptions LocationDescription[]
-  Animal               Animal[]
-  Plant                Plant[]
-  LegendaryAnimal      LegendaryAnimal?
+  animal               Animal[]
+  plant                Plant[]
+  legendaryAnimal      LegendaryAnimal?
   comments             Comment[]
 }
 
@@ -93,13 +93,13 @@ model Comment {
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
 
-  Location              Location[]
-  Animal                Animal[]
-  Plant                 Plant[]
+  location              Location[]
+  animal                Animal[]
+  plant                 Plant[]
   legendaryAnimalId     String?
-  LegendaryAnimal       LegendaryAnimal?     @relation(fields: [legendaryAnimalId], references: [id])
+  legendaryAnimal       LegendaryAnimal?     @relation(fields: [legendaryAnimalId], references: [id])
   locationDescriptionId String?
-  LocationDescription   LocationDescription? @relation(fields: [locationDescriptionId], references: [id])
+  locationDescription   LocationDescription? @relation(fields: [locationDescriptionId], references: [id])
 }
 
 // User model to store user information

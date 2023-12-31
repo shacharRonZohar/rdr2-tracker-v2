@@ -1,7 +1,9 @@
 export default defineEventHandler(ev => {
   return ev.context.prisma.plant.findMany({
-    include: {
-      Location: true,
+    select: {
+      id: true,
+      name: true,
+      location: true,
     },
   })
 })
