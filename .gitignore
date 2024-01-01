@@ -1,4 +1,4 @@
-# Created by .ignore support plugin (hsz.mobi)
+# Created by .ignore support plugin (hsz.mobi) and extended by @shacharRonZohar
 ### Node template
 # Logs
 /logs
@@ -79,6 +79,7 @@ dist
 
 # IDE / Editor
 .idea
+.vscode
 
 # Service worker
 sw.*
