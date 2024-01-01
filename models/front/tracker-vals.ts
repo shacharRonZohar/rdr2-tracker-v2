@@ -1,19 +1,10 @@
-import {
-  Category,
-  type $Enums,
-  type BaseEntity,
-  SubCategory,
-} from '@prisma/client'
+import { Category, type BaseEntity, SubCategory } from '@prisma/client'
 
 import {
   defaultTrackerValsIdentifierMap,
   defaultCategoriesTrackerValsIdentifierMap,
 } from '~/consts'
-import type {
-  FlattenDeepObject,
-  FlattenObject,
-  LiteralObjectToRaw,
-} from '../shared/util'
+import type { FlattenDeepObject, LiteralObjectToRaw } from '../shared/util'
 
 export type DefaultTrackerValsIdentifierMap =
   typeof defaultTrackerValsIdentifierMap
@@ -58,53 +49,12 @@ export interface BaseEntityWithTrackerVals<
     ? FlattenDeepObject<{
         [K in keyof DefaultCategoriesTrackerValsIdentifierMap[C][SC]]: TrackerValue<
           C,
-          //   TODO: Figure out how to prevent this error, the type seems to be working even though it's throwing an error
+          // TODO: Figure out how to prevent this error, the type seems to be working even though it's throwing an error
+          // @ts-expect-error
           DefaultCategoriesTrackerValsIdentifierMap[C][SC][K]
         >
       }>
     : keyof DefaultCategoriesTrackerValsIdentifierMap[C] extends infer N extends keyof DefaultTrackerValsIdentifierMap
     ? TrackerValue<C, N>
     : never
-}
-
-const testAnimal: BaseEntityWithTrackerVals<'ANIMAL', 'CRITTER'> = {
-  id: ' 1',
-  name: 'test',
-  category: Category.ANIMAL,
-  categoryId: '1',
-  comments: [],
-  createdAt: new Date(),
-  subCategory: SubCategory.CRITTER,
-  subCategoryId: '1',
-  updatedAt: new Date(),
-  trackerVals2: {
-    isCollected: true,
-  },
-}
-
-const testPlant: BaseEntityWithTrackerVals<'PLANT'> = {
-  id: ' 1',
-  name: 'test',
-  category: Category.PLANT,
-  categoryId: '1',
-  comments: [],
-  createdAt: new Date(),
-  subCategoryId: null,
-  subCategory: null,
-  updatedAt: new Date(),
-  trackerVals2: {
-    isCollected: true,
-    // isKilled: false,
-    // test: 'test',
-
-    // '0': {
-    //   isCollected: false,
-    // },
-    // '1': {
-    //   isStudied: false,
-    //   isTracked: false,
-    //   isKilled: false,
-    //   isSkinned: false,
-    // },
-  },
 }

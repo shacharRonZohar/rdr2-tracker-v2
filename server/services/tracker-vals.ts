@@ -1,4 +1,4 @@
-import type { $Enums } from '@prisma/client'
+import { Category } from '@prisma/client'
 import {
   defaultCategoriesTrackerValsIdentifierMap,
   defaultTrackerValsIdentifierMap,
@@ -6,7 +6,7 @@ import {
 import { isKeyOf } from '~/util'
 
 export function getDefaultTrackerVal<
-  C extends $Enums.Category,
+  C extends Category,
   SC extends keyof (typeof defaultCategoriesTrackerValsIdentifierMap)[C]
 >(category: C, subCategory?: SC) {
   // TODO: Get rid of this any

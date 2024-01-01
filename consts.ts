@@ -1,4 +1,4 @@
-import { $Enums } from '@prisma/client'
+import { Category, SubCategory } from '@prisma/client'
 
 export const defaultTrackerValsIdentifierMap = {
   0: {
@@ -16,11 +16,11 @@ export const defaultTrackerValsIdentifierMap = {
 } as const
 
 export const defaultCategoriesTrackerValsIdentifierMap = {
-  [$Enums.Category.ANIMAL]: {
-    [$Enums.SubCategory.DEFAULT]: { 0: 1, 1: 2 },
-    [$Enums.SubCategory.CRITTER]: { 0: 0 },
+  [Category.ANIMAL]: {
+    [SubCategory.DEFAULT]: { 0: 1, 1: 2 },
+    [SubCategory.CRITTER]: { 0: 0 },
   },
-  [$Enums.Category.PLANT]: { 0: 0 },
+  [Category.PLANT]: { 0: 0 },
 
-  [$Enums.Category.LEGENDARY_ANIMAL]: { 0: 1 },
+  [Category.LEGENDARY_ANIMAL]: { 0: 1 },
 } as const
