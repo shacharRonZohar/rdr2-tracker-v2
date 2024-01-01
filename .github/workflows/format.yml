@@ -17,7 +17,7 @@ jobs:
       - uses: actions/setup-node@v1
         with:
           node-version: '18.14.0' # replace with your Node.js version
-      - run: pnpm ci
+      - run: pnpm i
       - uses: wearerequired/lint-action@v2
         with:
           eslint: true
