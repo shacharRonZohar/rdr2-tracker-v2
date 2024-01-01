@@ -9,13 +9,22 @@
     "generate": "nuxt generate",
     "generate:prisma": "prisma generate",
     "preview": "nuxt preview",
-    "postinstall": "nuxt prepare && prisma generate"
+    "postinstall": "nuxt prepare && prisma generate",
+    "lint": "eslint --ext .js,.ts,.vue --fix --ignore-path  .gitignore .",
+    "prettify": "prettier --write --ignore-path .gitignore .",
+    "format": "pnpm lint && pnpm prettify"
   },
   "devDependencies": {
     "nuxt": "^3.9.0",
     "prisma": "^5.7.1",
     "vue": "^3.4.3",
-    "vue-router": "^4.2.5"
+    "vue-router": "^4.2.5",
+    "prettier": "^3.1.1",
+    "eslint": "^8.56.0",
+    "eslint-config-prettier": "^9.1.0",
+    "eslint-plugin-prettier": "^5.1.2",
+    "eslint-plugin-vue": "^9.19.2",
+    "@nuxtjs/eslint-config-typescript": "^12.1.0"
   },
   "dependencies": {
     "@hebilicious/vue-query-nuxt": "^0.3.0",

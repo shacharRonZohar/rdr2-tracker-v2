@@ -1,17 +1,17 @@
 import type { BaseEntity, Category, SubCategory } from '@prisma/client'
+import type { FlattenDeepObject } from '../shared/util'
 import type {
   DefaultCategoriesTrackerValsIdentifierMap,
   DefaultTrackerValsIdentifierMap,
   TrackerValue,
 } from './tracker-vals'
-import type { FlattenDeepObject } from '../shared/util'
 
 /**
  * Generic interface for base entities with category and subcategory information.
  */
 export interface GenericBaseEntity<
   C extends Category,
-  SC extends SubCategory | null = null
+  SC extends SubCategory | null = null,
 > extends BaseEntity {
   category: C
   categoryId: string
@@ -26,7 +26,7 @@ export interface GenericBaseEntity<
  */
 export interface BaseEntityWithTrackerVals<
   C extends Category,
-  SC extends SubCategory | null = null
+  SC extends SubCategory | null = null,
 > extends GenericBaseEntity<C, SC> {
   trackerVals: SC extends keyof DefaultCategoriesTrackerValsIdentifierMap[C]
     ? FlattenDeepObject<{
@@ -37,7 +37,8 @@ export interface BaseEntityWithTrackerVals<
           DefaultCategoriesTrackerValsIdentifierMap[C][SC][K]
         >
       }>
-    : keyof DefaultCategoriesTrackerValsIdentifierMap[C] extends infer N extends keyof DefaultTrackerValsIdentifierMap
-    ? TrackerValue<C, N>
-    : never
+    : keyof DefaultCategoriesTrackerValsIdentifierMap[C] extends infer N extends
+          keyof DefaultTrackerValsIdentifierMap
+      ? TrackerValue<C, N>
+      : never
 }

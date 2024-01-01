@@ -33,10 +33,10 @@ export type Optional<T> = {
 export type LiteralToRaw<T> = T extends boolean
   ? boolean
   : T extends number
-  ? number
-  : T extends string
-  ? string
-  : T
+    ? number
+    : T extends string
+      ? string
+      : T
 
 /**
  * Converts a literal object type to a raw object type. It applies `LiteralToRaw` to each property of the object,

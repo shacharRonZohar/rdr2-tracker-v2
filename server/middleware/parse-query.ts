@@ -1,10 +1,7 @@
-import { Category } from '@prisma/client'
 import { z } from 'zod'
 import { endpointsInputSchemaMap } from '~/models/shared/schemas'
 import { isKeyOf } from '~/services/shared/util'
 import { validate } from '~/services/shared/validation'
-
-// Find a way to infer this map from the Nuxt generated endpoints, it should be possible because we have endpoint typesafety in $fetch
 
 declare module 'h3' {
   interface H3EventContext {

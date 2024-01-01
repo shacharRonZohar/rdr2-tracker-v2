@@ -7,7 +7,7 @@ import { isKeyOf } from '~/services/shared/util'
 
 export function getDefaultTrackerVal<
   C extends Category,
-  SC extends keyof (typeof defaultCategoriesTrackerValsIdentifierMap)[C]
+  SC extends keyof (typeof defaultCategoriesTrackerValsIdentifierMap)[C],
 >(category: C, subCategory?: SC) {
   // TODO: Get rid of this any
   let identifiers = defaultCategoriesTrackerValsIdentifierMap[category] as any
@@ -15,7 +15,7 @@ export function getDefaultTrackerVal<
     identifiers = identifiers[subCategory]
   }
   if (!Array.isArray(identifiers)) {
-    throw new Error('Identifiers should be an array')
+    throw new TypeError('Identifiers should be an array')
   }
   // This casting to as number[] is necessary because of the previous any cast, should be removed when that is removed
   return (identifiers as number[]).reduce((acc, identifier) => {

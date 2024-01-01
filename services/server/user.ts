@@ -1,6 +1,6 @@
 import type { Prisma, PrismaClient } from '@prisma/client'
-import type { Optional } from '~/models/shared/util'
 import { hasAtLeastOneKey } from '../shared/util'
+import type { Optional } from '~/models/shared/util'
 
 export function getUsers(prisma: PrismaClient) {
   return prisma.user.findMany()

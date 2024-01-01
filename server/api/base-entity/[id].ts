@@ -1,6 +1,6 @@
-import { getBaseEntities, getBaseEntity } from '~/services/server/base-entity'
+import { getBaseEntity } from '~/services/server/base-entity'
 
-export default defineEventHandler(async ev => {
+export default defineEventHandler(ev => {
   const id = getRouterParam(ev, 'id')
   if (!id) {
     throw createError({

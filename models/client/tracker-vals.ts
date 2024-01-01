@@ -1,10 +1,10 @@
-import { Category, type BaseEntity, SubCategory } from '@prisma/client'
+import { Category } from '@prisma/client'
 
+import type { FlattenDeepObject, LiteralObjectToRaw } from '../shared/util'
 import {
   defaultTrackerValsIdentifierMap,
   defaultCategoriesTrackerValsIdentifierMap,
 } from '~/consts'
-import type { FlattenDeepObject, LiteralObjectToRaw } from '../shared/util'
 
 /**
  * Type representing the structure of the `defaultTrackerValsIdentifierMap`.
@@ -53,7 +53,7 @@ export type TrackerValues = LiteralObjectToRaw<DefaultTrackerValsIdentifierMap>
  */
 export type TrackerValue<
   C extends Category,
-  N extends keyof DefaultTrackerValsIdentifierMap
+  N extends keyof DefaultTrackerValsIdentifierMap,
 > = LiteralObjectToRaw<
   FlattenDeepObject<{
     [K in keyof DefaultCategoriesTrackerValsIdentifierMap[C]]: DefaultTrackerValsIdentifierMap[N]

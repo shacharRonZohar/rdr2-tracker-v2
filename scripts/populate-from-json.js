@@ -1,27 +1,37 @@
 import fs from 'fs/promises'
-
 import { PrismaClient } from '@prisma/client'
 
-const filePath = process.argv[2]
-const client = new PrismaClient()
-await main2()
-client.$disconnect()
+const dirPath = process.argv[2]
 
+main()
 async function main() {
-  const data = await fs.readFile(filePath, 'utf-8')
-  const json = JSON.parse(data)
-  const items = json.map(({ name }) => {
-    return {
-      name,
-    }
-  })
-  console.log(items.length, new Set(items).size)
-  //   items.leng
-  await client.plant.createMany({ data: items })
+  const client = new PrismaClient()
+  await Promise.all([
+    generateBaseEntities(client),
+    generateGenericNewAustin(client),
+  ])
+  client.$disconnect()
 }
 
-async function main2() {
-  await client.locationDescription.create({
+async function generateBaseEntities(client) {
+  const dirs = await fs.readdir(dirPath, 'utf-8')
+  const jsonFiles = dirs.filter(dir => dir.endsWith('.json'))
+  const items = await Promise.all(
+    jsonFiles.flatMap(async file => {
+      const data = await fs.readFile(`${dirPath}/${file}`, 'utf-8')
+      return JSON.parse(data).map(({ name }) => {
+        return {
+          name,
+        }
+      })
+    })
+  )
+
+  return client.baseEntity.createMany({ data: items })
+}
+
+function generateGenericNewAustin(client) {
+  return client.locationDescription.create({
     data: {
       text: 'this is a test location for generic new austin',
       location: {
