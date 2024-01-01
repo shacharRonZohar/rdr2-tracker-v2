@@ -10,9 +10,12 @@
     "generate:prisma": "prisma generate",
     "preview": "nuxt preview",
     "postinstall": "nuxt prepare && prisma generate",
-    "lint": "eslint --ext .js,.ts,.vue --fix --ignore-path  .gitignore .",
-    "prettify": "prettier --write --ignore-path .gitignore .",
-    "format": "pnpm lint && pnpm prettify"
+    "lint": "eslint --ext .js,.ts,.vue  --ignore-path  .gitignore .",
+    "lint:fix": "eslint --ext .js,.ts,.vue  --ignore-path  .gitignore --fix .",
+    "prettify": "prettier  --ignore-path .gitignore .",
+    "prettify:fix": "prettier  --ignore-path .gitignore --write .",
+    "format": "pnpm lint && pnpm prettify",
+    "format:fix": "pnpm lint:fix && pnpm prettify:fix"
   },
   "devDependencies": {
     "nuxt": "^3.9.0",
