@@ -1,3 +1,3 @@
 <template>
-  <div>Hi</div>
+  <div @click="console.log" class="test">Hi</div>
 </template>
