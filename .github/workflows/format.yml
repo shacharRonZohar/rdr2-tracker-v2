@@ -1,4 +1,5 @@
-name: Code Quality Checks
+name: Lint
+
 on:
   push:
     branches: [main]
@@ -6,21 +7,15 @@ on:
     branches: [main]
 
 jobs:
-  lint-and-format:
+  run-linters:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v2
-
-      - name: Setup pnpm
-        uses: pnpm/action-setup@v2
+      - uses: actions/setup-node@v1
         with:
-          version: '8.1.0' # specify the version of pnpm you need
-
-      - name: Install dependencies
-        run: pnpm install
-
-      - name: Run ESLint
-        run: pnpm run lint # assuming "lint" script in package.json runs ESLint
-
-      - name: Run Prettier
-        run: pnpm run format # assuming "format" script in package.json runs Prettier
+          node-version: '18.14.0' # replace with your Node.js version
+      - run: pnpm ci
+      - uses: wearerequired/lint-action@v2
+        with:
+          eslint: true
+          prettier: true
