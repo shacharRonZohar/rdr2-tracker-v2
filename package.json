@@ -20,6 +20,7 @@
   "dependencies": {
     "@hebilicious/vue-query-nuxt": "^0.3.0",
     "@prisma/client": "^5.7.1",
-    "@tanstack/vue-query": "^5.15.5"
+    "@tanstack/vue-query": "^5.15.5",
+    "zod": "^3.22.4"
   }
 }
