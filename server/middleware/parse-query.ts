@@ -1,3 +1,4 @@
+import { Category } from '@prisma/client'
 import { z } from 'zod'
 import { endpointsInputSchemaMap } from '~/models/shared/schemas'
 import { isKeyOf } from '~/services/shared/util'
