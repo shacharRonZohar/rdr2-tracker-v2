@@ -3,4 +3,7 @@ export default defineNuxtConfig({
   modules: ['@hebilicious/vue-query-nuxt'],
   srcDir: 'src',
   devtools: { enabled: true },
+  runtimeConfig: {
+    jwtSecret: process.env.JWT_SECRET,
+  },
 })
