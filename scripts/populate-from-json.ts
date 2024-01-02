@@ -60,9 +60,6 @@ async function generateGenericNewAustin(client: PrismaClient) {
   }
   const location = await client.location.create({ data: locationInput })
 
-  // const location
-  console.log('location', location.id)
-  // return
   return Promise.all(
     newAustinPlants.map(async name => {
       // connect base entity to location, without creating a new one
