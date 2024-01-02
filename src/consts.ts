@@ -33,9 +33,10 @@ export const defaultCategoriesTrackerValsIdentifierMap = {
     [SubCategory.DEFAULT]: { 0: 1, 1: 2 },
     [SubCategory.CRITTER]: { 0: 0 },
   },
-  [Category.PLANT]: { 0: 0 },
-
-  [Category.LEGENDARY_ANIMAL]: { 0: 1 },
+  [Category.PLANT]: {
+    [SubCategory.DEFAULT]: { 0: 0 },
+  },
+  [Category.LEGENDARY_ANIMAL]: {
+    [SubCategory.DEFAULT]: { 0: 1 },
+  },
 } as const
-
-export const categoriesWithSubCategories = [Category.ANIMAL] as const

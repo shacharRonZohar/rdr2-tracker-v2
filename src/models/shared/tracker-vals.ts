@@ -1,4 +1,4 @@
-import { Category } from '@prisma/client'
+import type { Category, SubCategory } from '@prisma/client'
 
 import type { FlattenDeepObject, LiteralObjectToRaw } from './util'
 import {
@@ -50,14 +50,19 @@ export type TrackerValues = LiteralObjectToRaw<
 >
 
 /**
- * Type representing tracker values for a specific category and identifier.
+ * Type representing tracker values for a specific category and subCategory.
  * It uses raw literal types and flattens the object structure.
  */
+
 export type TrackerValue<
   C extends Category,
-  N extends keyof DefaultTrackerValsIdentifierMap,
-> = LiteralObjectToRaw<
-  FlattenDeepObject<{
-    [K in keyof DefaultCategoriesTrackerValsIdentifierMap[C]]: DefaultTrackerValsIdentifierMap[N]
-  }>
->
+  SC extends SubCategory,
+> = SC extends keyof DefaultCategoriesTrackerValsIdentifierMap[C]
+  ? LiteralObjectToRaw<
+      FlattenDeepObject<{
+        [K in keyof DefaultCategoriesTrackerValsIdentifierMap[C][SC]]: DefaultCategoriesTrackerValsIdentifierMap[C][SC][K] extends keyof DefaultTrackerValsIdentifierMap
+          ? DefaultTrackerValsIdentifierMap[DefaultCategoriesTrackerValsIdentifierMap[C][SC][K]]
+          : never
+      }>
+    >
+  : never

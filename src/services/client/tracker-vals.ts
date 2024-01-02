@@ -1,43 +1,51 @@
-import { Category } from '@prisma/client'
+import { Category, SubCategory } from '@prisma/client'
 import {
-  categoriesWithSubCategories,
   defaultCategoriesTrackerValsIdentifierMap,
   defaultTrackerValsIdentifierMap,
 } from '~/consts'
-import type {
-  DefaultTrackerValsIdentifierMapKey,
-  TrackerValue,
-} from '~/models/shared/tracker-vals'
+
+import type { TrackerValue } from '~/models/shared/tracker-vals'
 
 // This is a godforsaked module, made of the most horrific code you can imagine, leave, for your own sanity
-export function getDefaultTrackerVal(
-  category: Category,
-  subCategory: keyof (typeof defaultCategoriesTrackerValsIdentifierMap)[Category]
-) {
-  // TODO: Find a better way to do this, maybe through typesafety
-  // fix this includes type error, which is dumb and shouldn't exist
-  if (subCategory && !categoriesWithSubCategories.includes(category)) {
-    throw new Error(
-      'This category does not have subcategories, but a subcategory was provided'
-    )
+// TODO: Fix this bullshit
+export function getDefaultTrackerVal<
+  C extends Category,
+  SC extends SubCategory,
+>(category: C, subCategory: SC) {
+  // TS is an asshole
+  const identifiers = isSubCategoryInThing(
+    subCategory,
+    defaultCategoriesTrackerValsIdentifierMap[category]
+  )
+    ? defaultCategoriesTrackerValsIdentifierMap[category][subCategory]
+    : null
+
+  // TS is an asshole
+  if (!identifiers) {
+    throw new Error('subCategory not found in category, turn back')
   }
 
-  const identifiers = subCategory
-    ? defaultCategoriesTrackerValsIdentifierMap[category][subCategory]
-    : defaultCategoriesTrackerValsIdentifierMap[category]
-
-  // TODO: get rid of this terrible casting and find a better way to do this
-  return Object.values(
-    identifiers as unknown as DefaultTrackerValsIdentifierMapKey[]
-  ).reduce((acc, identifier) => {
+  // TS is an asshole
+  return Object.values(identifiers).reduce((acc, identifier) => {
     return {
-      ...acc,
-      ...defaultTrackerValsIdentifierMap[identifier],
+      // TS is an asshole
+      ...(acc as any),
+      ...defaultTrackerValsIdentifierMap[
+        identifier as keyof typeof defaultTrackerValsIdentifierMap
+      ],
     }
-  }, {}) as TrackerValue<Category, any>
+  }, {}) as TrackerValue<C, SC>
 }
 
 // These functions exist because sometimes TS is an asshole, and I was trying to make it not be an asshole, but failed spectacularly.
+function isSubCategoryInThing<T extends object>(
+  subCategory: any,
+  thing: T
+): subCategory is keyof T {
+  return subCategory in thing
+}
+
+// These ones are already depracted.
 // I'm leaving them here, because I'm not sure if I'll need them again, and I don't want to go through the pain of writing them again.
 // They are a testament to my failure, and I'm not proud of them.
 
@@ -56,12 +64,6 @@ export function getDefaultTrackerVal(
 // ): category is (typeof categoriesWithSubCategories)[number] {
 //   // @ts-ignore
 //   return categoriesWithSubCategories.includes(category)
-// }
-
-// function throwNew() {
-//   throw new Error(
-//     'You fucked up if you managed to get here, go back to voodo land'
-//   )
 // }
 
 // type BET<T> = T extends readonly (infer U)[] ? U[] : never

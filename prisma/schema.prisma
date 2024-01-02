@@ -26,16 +26,14 @@ enum Category {
 
 enum SubCategory {
   DEFAULT
-  BIRD
-  FISH
   CRITTER
 }
 
 model BaseEntity {
-  id          String       @id @default(cuid())
-  name        String       @unique
+  id          String      @id @default(cuid())
+  name        String      @unique
   category    Category
-  subCategory SubCategory?
+  subCategory SubCategory @default(DEFAULT)
   locations   Location[]
   comments    String[]
 
