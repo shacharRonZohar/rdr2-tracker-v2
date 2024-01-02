@@ -1,5 +1,6 @@
 export const errorMsgs = {
   public: {
+    unknown: 'Unknown error',
     emailExists: 'This email already exists',
 
     incorrectCredentials: 'Incorrect credentials',

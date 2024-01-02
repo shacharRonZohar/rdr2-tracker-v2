@@ -46,5 +46,12 @@ export async function login(
 
   const { jwtSecret } = useRuntimeConfig()
 
-  return generateToken({ userId: user.id }, jwtSecret)
+  // TODO: Find the rule that allows this
+  // eslint-disable-next-line @typescript-eslint/no-unused-vars
+  const { password: _, ...cleanUser } = user
+
+  return {
+    user: cleanUser,
+    token: generateToken({ userId: user.id }, jwtSecret),
+  }
 }
