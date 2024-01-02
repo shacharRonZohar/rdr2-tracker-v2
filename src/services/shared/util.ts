@@ -5,3 +5,7 @@ export function isKeyOf<T extends object>(obj: T, key: any): key is keyof T {
 export function hasAtLeastOneKey<T>(obj: any): obj is T {
   return Object.keys(obj).length > 0
 }
+
+export function isNull(item: unknown): item is null {
+  return item === null
+}

@@ -4,7 +4,7 @@ import type {
   DefaultCategoriesTrackerValsIdentifierMap,
   DefaultTrackerValsIdentifierMap,
   TrackerValue,
-} from './tracker-vals'
+} from '../shared/tracker-vals'
 
 /**
  * Generic interface for base entities with category and subcategory information.

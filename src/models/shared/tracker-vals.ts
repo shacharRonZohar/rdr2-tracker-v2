@@ -1,6 +1,6 @@
 import { Category } from '@prisma/client'
 
-import type { FlattenDeepObject, LiteralObjectToRaw } from '../shared/util'
+import type { FlattenDeepObject, LiteralObjectToRaw } from './util'
 import {
   defaultTrackerValsIdentifierMap,
   defaultCategoriesTrackerValsIdentifierMap,
@@ -45,7 +45,9 @@ export type DefaultCategoriesTrackerValsIdentifierMapValue =
 /**
  * Type representing the tracker values as raw literals.
  */
-export type TrackerValues = LiteralObjectToRaw<DefaultTrackerValsIdentifierMap>
+export type TrackerValues = LiteralObjectToRaw<
+  DefaultTrackerValsIdentifierMap[DefaultTrackerValsIdentifierMapKey]
+>
 
 /**
  * Type representing tracker values for a specific category and identifier.

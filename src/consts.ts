@@ -37,3 +37,5 @@ export const defaultCategoriesTrackerValsIdentifierMap = {
 
   [Category.LEGENDARY_ANIMAL]: { 0: 1 },
 } as const
+
+export const categoriesWithSubCategories = [Category.ANIMAL] as const
