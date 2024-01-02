@@ -13,6 +13,7 @@ module.exports = {
     'vue/component-name-in-template-casing': ['error', 'PascalCase'],
     'vue/multi-word-component-names': 'off',
     'import/no-named-as-default': 'off',
+    'import/no-named-as-default-member': 'off',
     'prettier/prettier': [
       'error',
       {
