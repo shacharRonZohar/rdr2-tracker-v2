@@ -1,7 +1,6 @@
 import { z } from 'zod'
 import { endpointsInputSchemaMap } from '~/models/shared/schemas'
 import { isKeyOf } from '~/services/shared/util'
-import { validate } from '~/services/shared/validation'
 
 declare module 'h3' {
   interface H3EventContext {
@@ -18,7 +17,7 @@ export default defineEventHandler(ev => {
   }
   const schema = endpointsInputSchemaMap.query[path]
   const query = getQuery(ev)
-  const parsedQuery = validate(schema, query)
+  const parsedQuery = schema.safeParse(query)
   if (!parsedQuery.success) {
     throw createError({
       status: 400,
