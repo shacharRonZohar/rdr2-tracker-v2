@@ -69,7 +69,7 @@ model LocationData {
 model User {
   id        String   @id @default(cuid())
   email     String   @unique
-  name      String?
+  userName  String
   password  String
   //  data = [
   //   { id: 'asd123', trackerVals: [{ isKilled: true, isSkinned: false }] },
@@ -81,9 +81,9 @@ model User {
 
   @@index([data])
   @@index([email])
-  @@index([name])
+  @@index([userName])
   @@index([data, email])
-  @@index([data, name])
-  @@index([email, name])
-  @@index([data, email, name])
+  @@index([data, userName])
+  @@index([email, userName])
+  @@index([data, email, userName])
 }
