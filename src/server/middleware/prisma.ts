@@ -1,4 +1,4 @@
-import { getPrismaClient } from '~/prisma/db'
+import { getPrismaClient } from '~/../prisma/db'
 
 export default defineEventHandler(event => {
   event.context.prisma = getPrismaClient()
