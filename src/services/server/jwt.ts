@@ -9,10 +9,10 @@ export function generateToken(payload: object, secretKey: string): string {
 
 export function decodeToken(token: string, secretKey: string) {
   try {
-    return jwt.verify(token, secretKey)
+    return jwt.verify(token, secretKey) as { id: string }
   } catch (error) {
     // eslint-disable-next-line no-console
     console.error('Error verifying token:', error)
-    throw error
+    return null
   }
 }
