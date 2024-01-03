@@ -1,3 +1,4 @@
+import { cookieNames } from '~/consts'
 import { errorMsgs } from '~/models/shared/errors'
 import { loginApiInput } from '~/models/shared/schemas'
 import { login } from '~/services/server/auth'
@@ -17,7 +18,7 @@ export default defineEventHandler(async ev => {
     const refreshToken = generateRefreshToken({ id: user.id }, jwtSecret)
 
     // set the refresh token cookie
-    setCookie(ev, 'refresh_token', refreshToken, {
+    setCookie(ev, cookieNames.refreshToken, refreshToken, {
       httpOnly: true,
       maxAge: 60 * 60 * 24 * 7, // 7 days,
       sameSite: 'strict',

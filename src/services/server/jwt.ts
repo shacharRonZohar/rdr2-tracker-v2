@@ -19,9 +19,9 @@ export function generateToken<E extends `${number}d` | `${number}m`>(
   return token
 }
 
-export function verifyToken(token: string, secretKey: string) {
+export function verifyToken<T>(token: string, secretKey: string) {
   try {
-    return jwt.verify(token, secretKey) as { id: string }
+    return jwt.verify(token, secretKey) as T
   } catch (error) {
     // eslint-disable-next-line no-console
     console.error('Error verifying token:', error)

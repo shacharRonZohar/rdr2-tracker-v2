@@ -40,3 +40,7 @@ export const defaultCategoriesTrackerValsIdentifierMap = {
     [SubCategory.DEFAULT]: { 0: 1 },
   },
 } as const
+
+export const cookieNames = {
+  refreshToken: 'refresh_token',
+} as const
