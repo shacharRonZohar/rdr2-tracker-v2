@@ -1,5 +1,4 @@
 import { cookieNames } from '~/consts'
-import { errorMsgs } from '~/models/shared/errors'
 import { loginApiInput } from '~/models/shared/schemas'
 import { login } from '~/services/server/auth'
 import {
@@ -7,6 +6,7 @@ import {
   generateRefreshToken,
 } from '~/services/server/jwt'
 import { parseBody } from '~/services/server/parsing'
+import { handleHttpServerError } from '~/services/shared/util'
 
 export default defineEventHandler(async ev => {
   try {
@@ -28,16 +28,6 @@ export default defineEventHandler(async ev => {
       accessToken,
     }
   } catch (err) {
-    // eslint-disable-next-line no-console
-    console.log(err)
-    const error =
-      err instanceof Error &&
-      err.message === errorMsgs.public.incorrectCredentials
-        ? { statusCode: 400, message: errorMsgs.public.incorrectCredentials }
-        : { statusCode: 500, message: errorMsgs.public.unknown }
-
-    throw createError({
-      ...error,
-    })
+    handleHttpServerError(err)
   }
 })

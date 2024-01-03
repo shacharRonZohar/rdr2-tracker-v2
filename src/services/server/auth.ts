@@ -1,7 +1,7 @@
 import { Prisma, type PrismaClient } from '@prisma/client'
 import { checkPassword, hashPassword } from './encryption'
 import { createUser } from './user'
-import { errorMsgs } from '~/models/shared/errors'
+import { httpErrors } from '~/consts/errors/http'
 
 export async function signup(
   prisma: PrismaClient,
@@ -17,6 +17,7 @@ export async function signup(
   } catch (err) {
     // eslint-disable-next-line no-console
     console.log(err)
+    // TODO: Double check this error code, and make sure it's working as expected
     if (
       err &&
       err instanceof Prisma.PrismaClientKnownRequestError &&
@@ -24,7 +25,7 @@ export async function signup(
       Array.isArray(err.meta?.target) &&
       err.meta?.target?.includes('email')
     ) {
-      throw new Error(errorMsgs.public.emailExists)
+      throw httpErrors.public.emailExists()
     }
     throw err
   }
@@ -40,7 +41,7 @@ export async function login(
     },
   })
   if (!user || !(await checkPassword(password, user.password))) {
-    throw new Error(errorMsgs.public.incorrectCredentials)
+    throw httpErrors.public.incorrectCredentials()
   }
 
   // TODO: Find the rule that allows this

@@ -1,8 +1,9 @@
-import { errorMsgs } from '~/models/shared/errors'
 import { generateAccessToken, verifyToken } from '~/services/server/jwt'
 
 import { cookieNames } from '~/consts'
 import { getUser } from '~/services/server/user'
+import { httpErrors } from '~/consts/errors/http'
+import { handleHttpServerError } from '~/services/shared/util'
 export default defineEventHandler(async ev => {
   try {
     const refreshJwt = getCookie(ev, cookieNames.refreshToken)
@@ -15,10 +16,7 @@ export default defineEventHandler(async ev => {
       jwtSecret
     )
     if (!decodedRefreshToken?.id) {
-      throw createError({
-        statusCode: 401,
-        message: 'Invalid refresh token',
-      })
+      throw httpErrors.public.invalidRefreshToken()
     }
 
     const user = await getUser(ev.context.prisma, {
@@ -26,10 +24,7 @@ export default defineEventHandler(async ev => {
     })
 
     if (!user) {
-      throw createError({
-        statusCode: 401,
-        message: 'Invalid refresh token',
-      })
+      throw httpErrors.public.invalidRefreshToken()
     }
     const accessToken = generateAccessToken(user, jwtSecret)
 
@@ -37,11 +32,6 @@ export default defineEventHandler(async ev => {
       accessToken,
     }
   } catch (err) {
-    // eslint-disable-next-line no-console
-    console.log(err)
-    throw createError({
-      statusCode: 500,
-      message: errorMsgs.public.unknown,
-    })
+    handleHttpServerError(err)
   }
 })

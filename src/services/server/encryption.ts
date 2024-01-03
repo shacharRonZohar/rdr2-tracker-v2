@@ -7,6 +7,7 @@ export async function hashPassword(password: string): Promise<string> {
     const hashedPassword = await hash(password, salt)
     return hashedPassword
   } catch (error) {
+    // TODO: Handle error
     // eslint-disable-next-line no-console
     console.error('Error hashing password:', error)
     throw error
