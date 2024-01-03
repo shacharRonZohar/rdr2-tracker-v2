@@ -1,8 +1,12 @@
 import jwt from 'jsonwebtoken'
 
-export function generateToken(payload: object, secretKey: string): string {
+export function generateToken<E extends `${number}d`>(
+  payload: object,
+  secretKey: string,
+  expiresIn: E
+): string {
   const token = jwt.sign(payload, secretKey, {
-    expiresIn: '30d', // Expires in 7 days. You can adjust the duration as needed.
+    expiresIn, // Expires in 7 days. You can adjust the duration as needed.
   })
   return token
 }

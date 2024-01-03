@@ -50,8 +50,11 @@ export async function login(
   // eslint-disable-next-line @typescript-eslint/no-unused-vars
   const { password: _, ...cleanUser } = user
 
+  const accessToken = generateToken({ userId: user.id }, jwtSecret, '7d')
+  const refreshToken = generateToken({ userId: user.id }, jwtSecret, '30d')
   return {
     user: cleanUser,
-    token: generateToken({ userId: user.id }, jwtSecret),
+    accessToken,
+    refreshToken,
   }
 }

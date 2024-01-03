@@ -2,30 +2,41 @@ import { decodeToken, generateToken } from '~/services/server/jwt'
 
 declare module 'h3' {
   interface H3EventContext {
-    isLoggedIn: boolean
+    userId: null | string
   }
 }
 
 export default defineEventHandler(ev => {
-  const jwt = getCookie(ev, 'user')
-  if (!jwt) {
-    ev.context.isLoggedIn = false
+  ev.context.userId = null
+  const accessJwt = getCookie(ev, 'access')
+  if (!accessJwt) {
     return
   }
   const { jwtSecret } = useRuntimeConfig()
-  const decodedToken = decodeToken(jwt, jwtSecret)
-  if (!decodedToken?.id) {
-    ev.context.isLoggedIn = false
-    return
+  const decodedAccessToken = decodeToken(accessJwt, jwtSecret)
+  let id = decodedAccessToken?.id
+  if (!id) {
+    const refreshJwt = getCookie(ev, 'refresh')
+    if (!refreshJwt) {
+      return
+    }
+    const decodedRefreshToken = decodeToken(refreshJwt, jwtSecret)
+    if (!decodedRefreshToken?.id) {
+      return
+    }
+    const newToken = generateToken(
+      { id: decodedRefreshToken.id },
+      jwtSecret,
+      '7d'
+    )
+    setCookie(ev, 'access', newToken, {
+      httpOnly: true,
+      maxAge: 60 * 60 * 24 * 7, // 7 days,
+      sameSite: 'strict',
+      secure: true,
+    })
+    id = decodedRefreshToken.id
   }
-  const newToken = generateToken({ id: decodedToken.id }, jwtSecret)
 
-  setCookie(ev, 'user', newToken, {
-    httpOnly: true,
-    maxAge: 60 * 60 * 24 * 30, // 30 days,
-    sameSite: 'strict',
-    secure: true,
-  })
-
-  ev.context.isLoggedIn = true
+  ev.context.userId = id
 })

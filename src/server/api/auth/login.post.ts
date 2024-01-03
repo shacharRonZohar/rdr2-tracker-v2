@@ -3,9 +3,20 @@ import { login } from '~/services/server/auth'
 
 export default defineEventHandler(async ev => {
   try {
-    const { user, token } = await login(ev.context.prisma, ev.context.body)
-    // set the jwt cookie
-    setCookie(ev, 'user', token, {
+    const { user, accessToken, refreshToken } = await login(
+      ev.context.prisma,
+      ev.context.body
+    )
+    // set the access cookie
+    setCookie(ev, 'access', accessToken, {
+      httpOnly: true,
+      maxAge: 60 * 60 * 24 * 7, // 7 days,
+      sameSite: 'strict',
+      secure: true,
+    })
+
+    // set the refresh token cookie
+    setCookie(ev, 'refresh', refreshToken, {
       httpOnly: true,
       maxAge: 60 * 60 * 24 * 30, // 30 days,
       sameSite: 'strict',
