@@ -4,19 +4,19 @@ export function getUsers(prisma: PrismaClient) {
   return prisma.user.findMany()
 }
 
-export function getUser<T extends Prisma.UserWhereUniqueInput>(
-  prisma: PrismaClient,
-  where: T
-) {
+const defaultSelect = {
+  id: true,
+  email: true,
+  userName: true,
+  createdAt: true,
+  updatedAt: true,
+} satisfies Prisma.UserSelect
+export function getUser<
+  W extends Prisma.UserWhereUniqueInput,
+  S extends Prisma.UserSelect,
+>(prisma: PrismaClient, where: W, select?: S) {
   return prisma.user.findUnique({
-    select: {
-      id: true,
-      email: true,
-      userName: true,
-      data: true,
-      createdAt: true,
-      updatedAt: true,
-    },
+    select: select || defaultSelect,
     where,
   })
 }

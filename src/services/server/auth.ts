@@ -1,6 +1,5 @@
 import { Prisma, type PrismaClient } from '@prisma/client'
 import { checkPassword, hashPassword } from './encryption'
-import { generateToken } from './jwt'
 import { createUser } from './user'
 import { errorMsgs } from '~/models/shared/errors'
 
@@ -44,17 +43,11 @@ export async function login(
     throw new Error(errorMsgs.public.incorrectCredentials)
   }
 
-  const { jwtSecret } = useRuntimeConfig()
-
   // TODO: Find the rule that allows this
   // eslint-disable-next-line @typescript-eslint/no-unused-vars
-  const { password: _, ...cleanUser } = user
+  const { password: _, data: __, ...cleanUser } = user
 
-  const accessToken = generateToken({ userId: user.id }, jwtSecret, '7d')
-  const refreshToken = generateToken({ userId: user.id }, jwtSecret, '30d')
   return {
     user: cleanUser,
-    accessToken,
-    refreshToken,
   }
 }

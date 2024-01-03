@@ -1,6 +1,14 @@
 import jwt from 'jsonwebtoken'
 
-export function generateToken<E extends `${number}d`>(
+export function generateAccessToken(payload: object, secretKey: string) {
+  return generateToken(payload, secretKey, '15m')
+}
+
+export function generateRefreshToken(payload: object, secretKey: string) {
+  return generateToken(payload, secretKey, '7d')
+}
+
+export function generateToken<E extends `${number}d` | `${number}m`>(
   payload: object,
   secretKey: string,
   expiresIn: E
@@ -11,7 +19,7 @@ export function generateToken<E extends `${number}d`>(
   return token
 }
 
-export function decodeToken(token: string, secretKey: string) {
+export function verifyToken(token: string, secretKey: string) {
   try {
     return jwt.verify(token, secretKey) as { id: string }
   } catch (error) {
