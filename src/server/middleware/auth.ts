@@ -29,9 +29,23 @@ export default defineEventHandler(ev => {
       jwtSecret,
       '7d'
     )
+
+    const newRefreshToken = generateToken(
+      { id: decodedRefreshToken.id },
+      jwtSecret,
+      '30d'
+    )
+
     setCookie(ev, 'access', newToken, {
       httpOnly: true,
       maxAge: 60 * 60 * 24 * 7, // 7 days,
+      sameSite: 'strict',
+      secure: true,
+    })
+
+    setCookie(ev, 'refresh', newRefreshToken, {
+      httpOnly: true,
+      maxAge: 60 * 60 * 24 * 30, // 30 days,
       sameSite: 'strict',
       secure: true,
     })
