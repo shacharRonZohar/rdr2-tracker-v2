@@ -1,22 +1,22 @@
 import type { Prisma, PrismaClient } from '@prisma/client'
-import { hasAtLeastOneKey } from '../shared/util'
-import type { Optional } from '~/models/shared/util'
 
 export function getUsers(prisma: PrismaClient) {
   return prisma.user.findMany()
 }
 
-export function getUser(
+export function getUser<T extends Prisma.UserWhereUniqueInput>(
   prisma: PrismaClient,
-  where: Optional<Prisma.UserWhereUniqueInput>
+  where: T
 ) {
-  // TODO: find a way to get rid of this generic hack
-  if (!hasAtLeastOneKey<Prisma.UserWhereUniqueInput>(where)) {
-    throw new Error('At least one key must be provided')
-  }
-
-  //   TODO: Find a way to get rid of this type assertion
   return prisma.user.findUnique({
+    select: {
+      id: true,
+      email: true,
+      userName: true,
+      data: true,
+      createdAt: true,
+      updatedAt: true,
+    },
     where,
   })
 }
