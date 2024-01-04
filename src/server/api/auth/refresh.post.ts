@@ -1,4 +1,4 @@
-import { generateAccessToken, verifyToken } from '~/services/server/jwt'
+import { verifyToken } from '~/services/server/jwt'
 
 import { cookieNames } from '~/consts'
 import { getUser } from '~/services/server/user'
@@ -9,7 +9,7 @@ export default defineEventHandler(async ev => {
   try {
     const refreshJwt = getCookie(ev, cookieNames.refreshToken)
     if (!refreshJwt) {
-      return
+      throw httpErrors.public.invalidRefreshToken()
     }
     const { jwtSecret } = useRuntimeConfig()
     const decodedRefreshToken = verifyToken<{ id: string }>(
@@ -28,10 +28,11 @@ export default defineEventHandler(async ev => {
       throw httpErrors.public.invalidRefreshToken()
     }
 
-    generateAndSetNewAccessToken(ev, user)
+    const accessToken = generateAndSetNewAccessToken(ev, user)
 
     return {
       success: true,
+      accessToken,
     }
   } catch (err) {
     handleHttpServerError(err)

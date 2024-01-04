@@ -73,6 +73,8 @@ export function generateAndSetNewAccessToken(
   const { jwtSecret } = useRuntimeConfig()
   const accessToken = generateAccessToken(user, jwtSecret)
   setNewAccessToken(ev, accessToken)
+
+  return accessToken
 }
 
 export function setNewRefreshToken(ev: ExtractedH3Event, refreshToken: string) {
@@ -92,4 +94,5 @@ export function generateAndSetNewRefreshToken(
   const { jwtSecret } = useRuntimeConfig()
   const refreshToken = generateRefreshToken({ id }, jwtSecret)
   setNewRefreshToken(ev, refreshToken)
+  return refreshToken
 }

@@ -1,7 +1,7 @@
 export default defineNuxtRouteMiddleware((_to, _from) => {
-  const { data } = useUserSession()
-
-  if (!data.value?.id) {
-    return navigateTo('/login')
+  const { accessToken } = useAccessToken()
+  if (accessToken.value) {
+    return
   }
+  return navigateTo('/login')
 })

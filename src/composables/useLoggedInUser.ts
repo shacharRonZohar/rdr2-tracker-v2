@@ -1,9 +1,17 @@
+import type { UserWithoutPasswordOrData } from '~/models/shared/user'
+import { unsafeDecode } from '~/services/shared/jwt'
+
 export function useLoggedInUser() {
-  return useQuery({
-    queryKey: ['user'],
-    queryFn: () => $fetch('/api/auth/logged-in-user'),
-    refetchOnMount: false,
-    refetchOnWindowFocus: false,
-    staleTime: 1000 * 60 * 60,
+  const { accessToken } = useAccessToken()
+
+  const user = computed(() => {
+    if (!accessToken.value) {
+      return null
+    }
+    return unsafeDecode<UserWithoutPasswordOrData>(accessToken.value)
   })
+
+  return {
+    user,
+  }
 }
