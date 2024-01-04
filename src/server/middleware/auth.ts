@@ -1,8 +1,11 @@
 import { cookieNames } from '~/consts'
 import { httpErrors } from '~/consts/errors/http'
+import { ExtractedH3Event } from '~/models/server/h3'
 import { UserWithoutPasswordOrData } from '~/models/shared/user'
+import { generateAndSetNewAccessToken } from '~/services/server/auth'
 import { verifyToken } from '~/services/server/jwt'
 import { protectedRoutes } from '~/services/server/protected-routes'
+import { getUser } from '~/services/server/user'
 import { handleHttpServerError } from '~/services/shared/util'
 
 declare module 'h3' {
@@ -12,7 +15,7 @@ declare module 'h3' {
 }
 
 export default defineEventHandler(async ev => {
-  const route = ev.context.matchedRoute?.path
+  const route = getRequestURL(ev).pathname
   if (!route || !protectedRoutes.isRouteProtected(route)) {
     return
   }
@@ -20,8 +23,9 @@ export default defineEventHandler(async ev => {
   try {
     let accessToken = getCookie(ev, cookieNames.accessToken)
     let user = null as UserWithoutPasswordOrData | null
+
     if (!accessToken) {
-      const res = await refresh()
+      const res = await refresh(ev)
 
       if (!res || !res.accessToken || !res.decodedAccessToken) {
         throw httpErrors.public.notAuthorized()
@@ -33,7 +37,7 @@ export default defineEventHandler(async ev => {
     const { jwtSecret } = useRuntimeConfig()
     user = verifyToken<UserWithoutPasswordOrData>(accessToken, jwtSecret)
     if (!user?.id) {
-      const res = await refresh()
+      const res = await refresh(ev)
 
       if (!res || !res.accessToken || !res.decodedAccessToken) {
         throw httpErrors.public.notAuthorized()
@@ -48,17 +52,30 @@ export default defineEventHandler(async ev => {
   }
 })
 
-async function refresh() {
-  const res = await $fetch('/api/auth/refresh', {
-    method: 'POST',
-  })
-
-  if (!res.success) {
-    return null
+// TODO: Clean this up
+async function refresh(ev: ExtractedH3Event) {
+  const refreshJwt = getCookie(ev, cookieNames.refreshToken)
+  if (!refreshJwt) {
+    throw httpErrors.public.invalidRefreshToken()
   }
   const { jwtSecret } = useRuntimeConfig()
+  const decodedRefreshToken = verifyToken<{ id: string }>(refreshJwt, jwtSecret)
+  if (!decodedRefreshToken?.id) {
+    throw httpErrors.public.invalidRefreshToken()
+  }
+
+  const user = await getUser(ev.context.prisma, {
+    id: decodedRefreshToken.id,
+  })
+
+  if (!user) {
+    throw httpErrors.public.invalidRefreshToken()
+  }
+
+  const accessToken = generateAndSetNewAccessToken(ev, user)
+
   const decodedAccessToken = verifyToken<UserWithoutPasswordOrData>(
-    res.accessToken,
+    accessToken,
     jwtSecret
   )
 
@@ -66,5 +83,5 @@ async function refresh() {
     return null
   }
 
-  return { decodedAccessToken, accessToken: res.accessToken }
+  return { decodedAccessToken, accessToken }
 }
