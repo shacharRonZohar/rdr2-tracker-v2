@@ -10,14 +10,10 @@ export default defineEventHandler(async ev => {
     if (!body) {
       throw httpErrors.public.missingBody()
     }
-    const user = await signup(ev.context.prisma, body)
-    return $fetch('/api/auth/login', {
-      method: 'POST',
-      body: {
-        email: user.email,
-        password: body.password,
-      },
-    })
+    await signup(ev.context.prisma, body)
+    return {
+      success: true,
+    }
   } catch (err) {
     handleHttpServerError(err)
   }
