@@ -43,4 +43,5 @@ export const defaultCategoriesTrackerValsIdentifierMap = {
 
 export const cookieNames = {
   refreshToken: 'refresh_token',
+  accessToken: 'access_token',
 } as const

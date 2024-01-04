@@ -4,6 +4,7 @@ import { cookieNames } from '~/consts'
 import { getUser } from '~/services/server/user'
 import { httpErrors } from '~/consts/errors/http'
 import { handleHttpServerError } from '~/services/shared/util'
+import { generateAndSetNewAccessToken } from '~/services/server/auth'
 export default defineEventHandler(async ev => {
   try {
     const refreshJwt = getCookie(ev, cookieNames.refreshToken)
@@ -26,10 +27,11 @@ export default defineEventHandler(async ev => {
     if (!user) {
       throw httpErrors.public.invalidRefreshToken()
     }
-    const accessToken = generateAccessToken(user, jwtSecret)
+
+    generateAndSetNewAccessToken(ev, user)
 
     return {
-      accessToken,
+      success: true,
     }
   } catch (err) {
     handleHttpServerError(err)

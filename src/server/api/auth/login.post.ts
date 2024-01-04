@@ -1,10 +1,10 @@
-import { cookieNames } from '~/consts'
 import { loginApiInput } from '~/models/shared/schemas'
-import { login } from '~/services/server/auth'
 import {
-  generateAccessToken,
-  generateRefreshToken,
-} from '~/services/server/jwt'
+  generateAndSetNewAccessToken,
+  generateAndSetNewRefreshToken,
+  login,
+} from '~/services/server/auth'
+
 import { parseBody } from '~/services/server/parsing'
 import { handleHttpServerError } from '~/services/shared/util'
 
@@ -13,19 +13,11 @@ export default defineEventHandler(async ev => {
     const body = await parseBody(ev, loginApiInput)
     const { user } = await login(ev.context.prisma, body)
 
-    const { jwtSecret } = useRuntimeConfig()
-    const accessToken = generateAccessToken(user, jwtSecret)
-    const refreshToken = generateRefreshToken({ id: user.id }, jwtSecret)
+    generateAndSetNewAccessToken(ev, user)
+    generateAndSetNewRefreshToken(ev, user.id)
 
-    // set the refresh token cookie
-    setCookie(ev, cookieNames.refreshToken, refreshToken, {
-      httpOnly: true,
-      maxAge: 60 * 60 * 24 * 7, // 7 days,
-      sameSite: 'strict',
-      // secure: true,
-    })
     return {
-      accessToken,
+      success: true,
     }
   } catch (err) {
     handleHttpServerError(err)

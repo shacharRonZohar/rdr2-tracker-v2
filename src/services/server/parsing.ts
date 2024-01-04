@@ -1,8 +1,9 @@
 import type z from 'zod'
 import { httpErrors } from '~/consts/errors/http'
+import type { ExtractedH3Event } from '~/models/server/h3'
 
 export async function parseBody<U extends z.ZodRawShape>(
-  ev: Parameters<Parameters<typeof defineEventHandler>[0]>[0],
+  ev: ExtractedH3Event,
   schema: z.ZodObject<U>
 ) {
   const body = await readBody(ev)

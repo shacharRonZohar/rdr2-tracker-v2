@@ -1,3 +1,4 @@
+import { cookieNames } from '~/consts'
 import { UserWithoutPasswordOrData } from '~/models/shared/user'
 import { verifyToken } from '~/services/server/jwt'
 
@@ -8,17 +9,14 @@ declare module 'h3' {
 }
 
 export default defineEventHandler(ev => {
-  const authHeader = getHeader(ev, 'Authorization')
-  if (!authHeader) {
+  const accessToken = getCookie(ev, cookieNames.accessToken)
+  if (!accessToken) {
     return
   }
-  const [type, token] = authHeader.split(' ')
-  if (type !== 'Bearer') {
-    return
-  }
+
   const { jwtSecret } = useRuntimeConfig()
   const decodedAccessToken = verifyToken<UserWithoutPasswordOrData>(
-    token,
+    accessToken,
     jwtSecret
   )
   if (!decodedAccessToken?.id) {
