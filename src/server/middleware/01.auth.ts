@@ -35,7 +35,11 @@ export default defineEventHandler(async ev => {
     }
 
     const { jwtSecret } = useRuntimeConfig()
-    user = verifyToken<UserWithoutPasswordOrData>(accessToken, jwtSecret)
+    try {
+      user = verifyToken<UserWithoutPasswordOrData>(accessToken, jwtSecret)
+    } catch (err) {
+      console.log(err)
+    }
     if (!user?.id) {
       const res = await refresh(ev)
 

@@ -1,4 +1,5 @@
 export default defineNuxtRouteMiddleware(to => {
+  if (process.server) return
   const { accessToken } = useAccessToken()
   if (!accessToken.value) {
     return

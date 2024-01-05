@@ -1,15 +1,15 @@
+import { Prisma } from '@prisma/client'
 import { protectedRoutes } from '~/services/server/protected-routes'
-import { getUser } from '~/services/server/user'
+import { getUserData } from '~/services/server/user'
 
 protectedRoutes.protectRoute('/api/user-data')
-export default defineEventHandler(ev => {
+export default defineEventHandler(async ev => {
   const id = ev.context.user!.id
 
-  return getUser(
-    ev.context.prisma,
-    { id },
-    {
-      data: true,
-    }
-  )
+  const res = await getUserData(ev.context.prisma, { id })
+  if (!res?.data) {
+    throw new Error('No data found')
+  }
+
+  return res.data as Prisma.JsonObject
 })
