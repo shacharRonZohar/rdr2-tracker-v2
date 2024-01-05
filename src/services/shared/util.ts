@@ -24,3 +24,7 @@ export function handleHttpServerError(err: unknown) {
   }
   throw httpErrors.public.unknown()
 }
+
+export function isObjEmpty(obj: object) {
+  return Object.keys(obj).length === 0
+}

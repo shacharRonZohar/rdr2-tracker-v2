@@ -1,10 +1,11 @@
 export function useUserData() {
-  return useQuery({
-    queryKey: ['userData'],
-    queryFn: () => $fetch('/api/user-data'),
-    staleTime: 1000 * 60 * 60,
-    refetchOnMount: false,
-    refetchOnWindowFocus: false,
-    retry: false,
-  })
+  const { data, error, refresh, status, pending } = useFetch('/api/user-data')
+
+  return {
+    userData: data,
+    userDataError: error,
+    refreshUserData: refresh,
+    userDataStatus: status,
+    isUserDataPending: pending,
+  }
 }
