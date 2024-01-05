@@ -65,12 +65,19 @@ model LocationData {
   updatedAt DateTime @updatedAt
 }
 
+enum Role {
+  USER
+  MOD
+  ADMIN
+}
+
 // User model to store user information
 model User {
   id        String   @id @default(cuid())
   email     String   @unique
   userName  String
   password  String
+  role      Role     @default(USER)
   //  data = {
   //    'asd123': { isKilled: true, isSkinned: false } ,
   //    'asd312':{ isCollected: false },
