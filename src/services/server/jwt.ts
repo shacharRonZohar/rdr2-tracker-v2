@@ -1,7 +1,7 @@
 import jwt from 'jsonwebtoken'
 
 export function generateAccessToken(payload: object, secretKey: string) {
-  return generateToken(payload, secretKey, '1m')
+  return generateToken(payload, secretKey, '15m')
 }
 
 export function generateRefreshToken(payload: object, secretKey: string) {
