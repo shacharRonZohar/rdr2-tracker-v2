@@ -1,6 +1,6 @@
 import type { Category, SubCategory } from '@prisma/client'
 import type { TrackerValue } from '~/models/shared/tracker-vals'
-import { isObjEmpty } from '~/services/shared/util'
+import { getDefaultTrackerVal } from '~/services/client/tracker-vals'
 
 export function usePopulatedBaseEntities() {
   const { data: baseEntities } = useBaseEntities()
@@ -8,22 +8,18 @@ export function usePopulatedBaseEntities() {
   const populatedBaseEntities = computed(() => {
     if (!baseEntities.value || !userData.value) return null
 
-    return isObjEmpty(userData.value)
-      ? baseEntities
-      : baseEntities.value.map(baseEntity => {
-          // TODO: Refine this type
-          const userDataItem = (
-            userData.value as Record<
-              string,
-              TrackerValue<Category, SubCategory>
-            >
-          )[baseEntity.id]
-          if (!userDataItem) return baseEntity
-          return {
-            ...baseEntity,
-            trackerValues: userDataItem,
-          }
-        })
+    return baseEntities.value.map(baseEntity => {
+      // TODO: Refine this type
+      const userDataItem =
+        (userData.value as Record<string, TrackerValue<Category, SubCategory>>)[
+          baseEntity.id
+        ] ?? getDefaultTrackerVal(baseEntity.category, baseEntity.subCategory)
+      if (!userDataItem) return baseEntity
+      return {
+        ...baseEntity,
+        trackerValues: userDataItem,
+      }
+    })
   })
   return {
     populatedBaseEntities,
