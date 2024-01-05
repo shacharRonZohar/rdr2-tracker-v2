@@ -47,7 +47,10 @@ export type DefaultCategoriesTrackerValsIdentifierMapValue =
  */
 export type TrackerValues = LiteralObjectToRaw<
   DefaultTrackerValsIdentifierMap[DefaultTrackerValsIdentifierMapKey]
->
+> & {
+  // [Symbol.iterator]: () => IterableIterator<keyof TrackerValues>
+  [index: string]: any
+}
 
 /**
  * Type representing tracker values for a specific category and subCategory.

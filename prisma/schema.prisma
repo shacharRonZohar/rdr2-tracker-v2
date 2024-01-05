@@ -78,10 +78,10 @@ model User {
   userName  String
   password  String
   role      Role     @default(USER)
-  //  data = {
-  //    'asd123': { isKilled: true, isSkinned: false } ,
+  //  data ={
+  //    asd123:{ isKilled: true, isSkinned: false } ,
   //    'asd312':{ isCollected: false },
-  //  }
+  // }
   data      Json     @default("{}")
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt

@@ -10,7 +10,9 @@ export async function parseBody<U extends z.ZodRawShape>(
   if (!body) throw httpErrors.public.missingBody()
   const parseBody = schema.safeParse(body)
   if (!parseBody.success) {
-    throw httpErrors.public.parsingError(parseBody.error.message)
+    throw httpErrors.public.parsingError(
+      JSON.stringify(parseBody.error.flatten().fieldErrors)
+    )
   }
   return parseBody.data
 }

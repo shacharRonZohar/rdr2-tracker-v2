@@ -1,4 +1,5 @@
 import { Category, SubCategory } from '@prisma/client'
+import type { TrackerValues } from './models/shared/tracker-vals'
 
 /**
  * A mapping of default tracker values identifiers to their respective tracking attributes.
@@ -21,6 +22,14 @@ export const defaultTrackerValsIdentifierMap = {
   },
 } as const
 
+export const allTrackerVals = {
+  isCollected: false,
+  isStudied: false,
+  isTracked: false,
+  isKilled: false,
+  isSkinned: false,
+  isPerfectSkin: false,
+} satisfies TrackerValues
 /**
  * A mapping of default categories to tracker value identifiers.
  * This provides a structure for associating categories and subcategories
