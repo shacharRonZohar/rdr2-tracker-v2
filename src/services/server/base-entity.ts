@@ -35,7 +35,7 @@ const detailedSelect = {
 
 export function getBaseEntities(
   prisma: PrismaClient,
-  category: Category,
+  category: Category | undefined = undefined,
   subCategory: SubCategory | undefined = undefined
 ) {
   return prisma.baseEntity.findMany({

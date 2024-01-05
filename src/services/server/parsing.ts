@@ -14,3 +14,15 @@ export async function parseBody<U extends z.ZodRawShape>(
   }
   return parseBody.data
 }
+
+export function parseQuery<U extends z.ZodRawShape>(
+  ev: ExtractedH3Event,
+  schema: z.ZodObject<U>
+) {
+  const query = getQuery(ev)
+  const parsedQuery = schema.safeParse(query)
+  if (!parsedQuery.success) {
+    throw httpErrors.public.parsingError(parsedQuery.error.message)
+  }
+  return parsedQuery.data
+}

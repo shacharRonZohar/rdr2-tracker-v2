@@ -1,5 +1,8 @@
+import { baseEntitiesApiInput } from '~/models/shared/schemas'
 import { getBaseEntities } from '~/services/server/base-entity'
+import { parseQuery } from '~/services/server/parsing'
 
 export default defineEventHandler(ev => {
-  return getBaseEntities(ev.context.prisma, ev.context.query.category)
+  const query = parseQuery(ev, baseEntitiesApiInput)
+  return getBaseEntities(ev.context.prisma, query.category)
 })
