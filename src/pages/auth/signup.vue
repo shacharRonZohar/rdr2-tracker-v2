@@ -1,7 +1,7 @@
 <template>
   <div>
-    <div v-if="isPending">Loading...</div>
-    <div v-else-if="error">Error: {{ error }}</div>
+    <div v-if="isSignupPending">Loading...</div>
+    <div v-else-if="isSignupError">Error: {{ isSignupError }}</div>
     <form @submit.prevent="onSignup">
       <input id="user-name" v-model="userName" type="text" name="user-name" />
       <input id="email" v-model="email" type="email" name="email" />
@@ -15,13 +15,17 @@
 definePageMeta({
   middleware: ['non-auth-only'],
 })
-const { mutateAsync, isPending, error } = useSignup()
+const {
+  mutateAsync: signup,
+  isPending: isSignupPending,
+  error: isSignupError,
+} = useSignup()
 
 const userName = ref('')
 const email = ref('')
 const password = ref('')
 function onSignup() {
-  mutateAsync({
+  signup({
     email: email.value,
     password: password.value,
     userName: userName.value,

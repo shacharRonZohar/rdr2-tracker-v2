@@ -4,7 +4,7 @@ import type { signupApiInput } from '~/models/shared/schemas'
 export function useSignup() {
   const router = useRouter()
   const { callBackUrl } = useCallbackUrl()
-  const { mutateAsync } = useLogin()
+  const { mutateAsync: login } = useLogin()
   return useMutation({
     mutationKey: ['signup'],
     mutationFn: (data: z.infer<typeof signupApiInput>) => {
@@ -15,7 +15,7 @@ export function useSignup() {
     },
     onSuccess: async (data, input) => {
       if (!data.success) return
-      await mutateAsync({
+      await login({
         email: input.email,
         password: input.password,
       })
