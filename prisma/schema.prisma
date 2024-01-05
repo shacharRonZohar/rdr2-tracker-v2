@@ -71,11 +71,11 @@ model User {
   email     String   @unique
   userName  String
   password  String
-  //  data = [
-  //   { id: 'asd123', trackerVals: [{ isKilled: true, isSkinned: false }] },
-  //   { id: 'asd312', trackerVals: [{ isCollected: false }] },
-  // ]
-  data      Json?    @default("[]")
+  //  data = {
+  //    'asd123': { isKilled: true, isSkinned: false } ,
+  //    'asd312':{ isCollected: false },
+  //  }
+  data      Json     @default("{}")
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
 
