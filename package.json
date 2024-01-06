@@ -4,7 +4,7 @@
   "type": "module",
   "scripts": {
     "start": "node .output/server/index.mjs",
-    "build": "nuxt build && prisma generate",
+    "build": "prisma generate && nuxt build",
     "dev": "nuxt dev",
     "generate": "nuxt generate",
     "generate:prisma": "prisma generate",
