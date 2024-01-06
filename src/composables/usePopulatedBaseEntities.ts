@@ -1,4 +1,5 @@
 import type { Category, SubCategory } from '@prisma/client'
+import type { BaseEntityWithAnyTrackerVals } from '~/models/client/base-entity'
 import type { TrackerValue } from '~/models/shared/tracker-vals'
 import { getDefaultTrackerVal } from '~/services/client/tracker-vals'
 
@@ -14,11 +15,11 @@ export function usePopulatedBaseEntities() {
         (userData.value as Record<string, TrackerValue<Category, SubCategory>>)[
           baseEntity.id
         ] ?? getDefaultTrackerVal(baseEntity.category, baseEntity.subCategory)
-      if (!userDataItem) return baseEntity
+
       return {
         ...baseEntity,
         trackerValues: userDataItem,
-      }
+      } as BaseEntityWithAnyTrackerVals
     })
   })
   return {
