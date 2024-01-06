@@ -28,3 +28,7 @@ export function handleHttpServerError(err: unknown) {
 export function isObjEmpty(obj: object) {
   return Object.keys(obj).length === 0
 }
+
+export function isObjsEqual(obj1: object, obj2: object) {
+  return JSON.stringify(obj1) === JSON.stringify(obj2)
+}

@@ -19,28 +19,10 @@ export type DefaultTrackerValsIdentifierMapKey =
   keyof DefaultTrackerValsIdentifierMap
 
 /**
- * Value type of the `DefaultTrackerValsIdentifierMap`.
- */
-export type DefaultTrackerValsIdentifierMapValue =
-  DefaultTrackerValsIdentifierMap[DefaultTrackerValsIdentifierMapKey]
-
-/**
  * Type representing the structure of the `defaultCategoriesTrackerValsIdentifierMap`.
  */
 export type DefaultCategoriesTrackerValsIdentifierMap =
   typeof defaultCategoriesTrackerValsIdentifierMap
-
-/**
- * Key type of the `DefaultCategoriesTrackerValsIdentifierMap`.
- */
-export type DefaultCategoriesTrackerValsIdentifierMapKey =
-  keyof DefaultCategoriesTrackerValsIdentifierMap
-
-/**
- * Value type of the `DefaultCategoriesTrackerValsIdentifierMap`.
- */
-export type DefaultCategoriesTrackerValsIdentifierMapValue =
-  DefaultCategoriesTrackerValsIdentifierMap[DefaultCategoriesTrackerValsIdentifierMapKey]
 
 /**
  * Type representing the tracker values as raw literals.

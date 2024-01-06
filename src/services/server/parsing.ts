@@ -2,9 +2,9 @@ import type z from 'zod'
 import { httpErrors } from '~/consts/errors/http'
 import type { ExtractedH3Event } from '~/models/server/h3'
 
-export async function parseBody<U extends z.ZodRawShape>(
+export async function parseBody<U extends z.ZodType<any, any>>(
   ev: ExtractedH3Event,
-  schema: z.ZodObject<U>
+  schema: U
 ) {
   const body = await readBody(ev)
   if (!body) throw httpErrors.public.missingBody()
@@ -17,9 +17,9 @@ export async function parseBody<U extends z.ZodRawShape>(
   return parseBody.data
 }
 
-export function parseQuery<U extends z.ZodRawShape>(
+export function pareQuery<U extends z.ZodType<any, any>>(
   ev: ExtractedH3Event,
-  schema: z.ZodObject<U>
+  schema: U
 ) {
   const query = getQuery(ev)
   const parsedQuery = schema.safeParse(query)

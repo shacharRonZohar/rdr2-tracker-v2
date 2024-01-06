@@ -50,6 +50,12 @@ export const defaultCategoriesTrackerValsIdentifierMap = {
   },
 } as const
 
+export const categorySubCategoryMap = {
+  [Category.ANIMAL]: [SubCategory.DEFAULT, SubCategory.CRITTER],
+  [Category.PLANT]: [SubCategory.DEFAULT],
+  [Category.LEGENDARY_ANIMAL]: [SubCategory.DEFAULT],
+} as const
+
 export const cookieNames = {
   refreshToken: 'refresh_token',
   accessToken: 'access_token',
