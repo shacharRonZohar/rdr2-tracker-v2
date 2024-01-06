@@ -10,6 +10,7 @@
     "generate:prisma": "prisma generate",
     "preview": "nuxt preview",
     "postinstall": "nuxt prepare && prisma generate",
+    "postbuild": "pnpm generate:prisma",
     "lint": "eslint --ext .js,.ts,.vue  --ignore-path  .gitignore .",
     "lint:fix": "eslint --ext .js,.ts,.vue  --ignore-path  .gitignore --fix .",
     "prettify": "prettier  --ignore-path .gitignore .",
