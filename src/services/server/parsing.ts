@@ -17,7 +17,7 @@ export async function parseBody<U extends z.ZodType<any, any>>(
   return parseBody.data
 }
 
-export function pareQuery<U extends z.ZodType<any, any>>(
+export function parseQuery<U extends z.ZodType<any, any>>(
   ev: ExtractedH3Event,
   schema: U
 ) {
