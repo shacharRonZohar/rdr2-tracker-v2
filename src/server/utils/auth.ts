@@ -10,7 +10,7 @@ import { handleHttpServerError } from '~/services/shared/util'
 
 declare module 'h3' {
   interface H3EventContext {
-    user?: UserWithoutPasswordOrData
+    user: UserWithoutPasswordOrData
   }
 }
 
