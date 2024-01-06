@@ -1,12 +1,9 @@
-export default defineNuxtRouteMiddleware(to => {
+export default defineNuxtRouteMiddleware((_to, from) => {
   if (process.server) return
   const { accessToken } = useAccessToken()
   if (!accessToken.value) {
     return
   }
-  const redirectUrl =
-    to.query.callBackUrl && !Array.isArray(to.query.callBackUrl)
-      ? to.query.callBackUrl
-      : '/'
+  const redirectUrl = from.path ?? '/'
   return navigateTo(redirectUrl)
 })
