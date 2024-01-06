@@ -1,5 +1,7 @@
 export function useUserData() {
-  const { data, error, refresh, status, pending } = useFetch('/api/user-data')
+  const { data, error, refresh, status, pending } = useFetch('/api/user-data', {
+    method: 'GET',
+  })
 
   return {
     userData: data,

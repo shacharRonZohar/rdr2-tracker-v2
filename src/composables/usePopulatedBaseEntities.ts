@@ -3,7 +3,7 @@ import type { TrackerValue } from '~/models/shared/tracker-vals'
 import { getDefaultTrackerVal } from '~/services/client/tracker-vals'
 
 export function usePopulatedBaseEntities() {
-  const { data: baseEntities } = useBaseEntities()
+  const { baseEntities } = useBaseEntities()
   const { userData } = useUserData()
   const populatedBaseEntities = computed(() => {
     if (!baseEntities.value || !userData.value) return null

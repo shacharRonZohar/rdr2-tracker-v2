@@ -43,7 +43,7 @@ export async function getUserData<W extends Prisma.UserWhereUniqueInput>(
     return null
   }
 
-  return res.data as UserDataItem[]
+  return res.data as UserDataItem
 }
 
 export function addUserDataItem(
